@@ -174,6 +174,6 @@ cli
   });
 
 cli.help();
-cli.version('0.0.1');
+cli.version('0.0.2');
 
 cli.parse();
