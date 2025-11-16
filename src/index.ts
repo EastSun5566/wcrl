@@ -60,19 +60,20 @@ async function crawl(options: CrawlOptions) {
   await context.route('**/*', (route) => {
     const resourceType = route.request().resourceType();
     if (['image', 'stylesheet', 'font', 'media'].includes(resourceType)) {
-      route.abort();
+      route.abort().catch(console.error);
     } else {
-      route.continue();
+      route.continue().catch(console.error);
     }
   });
 
   try {
     while (queue.length > 0 && results.length < max) {
-      const currentUrl = queue.shift()!;
+      const currentUrl = queue.shift();
+      if (!currentUrl) continue;
       if (visited.has(currentUrl)) continue;
       visited.add(currentUrl);
 
-      spinner.text = `Crawling (${results.length + 1}/${max}): ${currentUrl}`;
+      spinner.text = `Crawling (${String(results.length + 1)}/${String(max)}): ${currentUrl}`;
 
       try {
         const page = await context.newPage();
@@ -91,7 +92,7 @@ async function crawl(options: CrawlOptions) {
           const element = document.querySelector(sel);
           return {
             title: document.title,
-            content: element?.textContent?.trim() || '',
+            content: element?.textContent.trim() ?? '',
           };
         }, selector);
 
@@ -103,6 +104,7 @@ async function crawl(options: CrawlOptions) {
         });
 
         if (results.length < max) {
+          // collect all links
           const links = await page.evaluate(() => {
             return Array.from(document.querySelectorAll('a[href]'))
               .map(a => (a as HTMLAnchorElement).href)
@@ -118,16 +120,16 @@ async function crawl(options: CrawlOptions) {
 
         await page.close();
       } catch (error) {
-        spinner.warn(chalk.yellow(`Failed to crawl ${currentUrl}: ${error}`));
+        spinner.warn(chalk.yellow(`Failed to crawl ${currentUrl}: ${String(error)}`));
       }
     }
 
     await writeFile(output, JSON.stringify(results, null, 2));
-    spinner.succeed(chalk.green(`✓ Crawled ${results.length} pages → ${output}`));
+    spinner.succeed(chalk.green(`✓ Crawled ${String(results.length)} pages → ${output}`));
     
     console.log(chalk.blue('\nResults:'));
     results.forEach((r, i) => {
-      console.log(chalk.gray(`  ${i + 1}. ${r.title} (${r.url})`));
+      console.log(chalk.gray(`  ${String(i + 1)}. ${r.title} (${r.url})`));
     });
 
   } finally {
@@ -146,7 +148,12 @@ cli
   .example('crwl https://example.com')
   .example('crwl https://docs.com -s "article" -m 50')
   .example('crwl https://blog.com --match "https://blog.com/posts/**"')
-  .action(async (url: string, options) => {
+  .action(async (url: string, options: {
+    selector: string;
+    output: string;
+    max: string;
+    match: string;
+  }) => {
     if (!isValidUrl(url)) {
       console.error(chalk.red(`Error: Invalid URL: ${url}`));
       process.exit(1);

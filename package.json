@@ -2,6 +2,10 @@
   "name": "crwl",
   "version": "0.0.1",
   "description": "Ultra minimal web crawler",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "bin": {
     "crwl": "./dist/index.js"
@@ -14,8 +18,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc && node dist/index.js",
-    "lint": "oxlint --fix src",
-    "prepublishOnly": "npm run build"
+    "lint": "eslint --fix src",
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "crawler",
@@ -26,9 +30,11 @@
   "author": "Michael Wang <michael19920327@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
-    "oxlint": "^1.28.0",
-    "typescript": "^5.9.3"
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4"
   },
   "dependencies": {
     "cac": "^6.7.14",
