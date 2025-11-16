@@ -137,7 +137,7 @@ async function crawl(options: CrawlOptions) {
   }
 }
 
-const cli = cac('crwl');
+const cli = cac('wcrl');
 
 cli
   .command('<url>', 'URL to start crawling')
@@ -145,9 +145,9 @@ cli
   .option('-o, --output <file>', 'Output JSON file', { default: 'output.json' })
   .option('-m, --max <number>', 'Maximum pages to crawl', { default: '10' })
   .option('--match <pattern>', 'URL pattern to match (supports * and **)')
-  .example('crwl https://example.com')
-  .example('crwl https://docs.com -s "article" -m 50')
-  .example('crwl https://blog.com --match "https://blog.com/posts/**"')
+  .example('wcrl https://example.com')
+  .example('wcrl https://docs.com -s "article" -m 50')
+  .example('wcrl https://blog.com --match "https://blog.com/posts/**"')
   .action(async (url: string, options: {
     selector: string;
     output: string;
