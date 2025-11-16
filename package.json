@@ -16,7 +16,7 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "dev": "tsc && node dist/index.js",
     "lint": "eslint --fix src",
     "prepublishOnly": "pnpm run build"
