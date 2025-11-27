@@ -1,6 +1,6 @@
 {
   "name": "wcrl",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Ultra minimal web crawler",
   "packageManager": "pnpm@9.15.9",
   "engines": {
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",
+    "@types/turndown": "^5.0.6",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.4"
@@ -39,7 +40,9 @@
   "dependencies": {
     "cac": "^6.7.14",
     "chalk": "^5.6.2",
+    "cheerio": "^1.1.2",
     "ora": "^9.0.0",
-    "playwright": "^1.56.1"
+    "playwright": "^1.56.1",
+    "turndown": "^7.2.2"
   }
 }
