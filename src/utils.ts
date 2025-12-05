@@ -27,7 +27,10 @@ export function getBaseDomain(url: string) {
 
 export function normalizeUrl(href: string, baseUrl: string) {
   try {
-    return new URL(href, baseUrl).href;
+    const url = new URL(href, baseUrl);
+    // Remove hash to avoid treating anchors as different URLs
+    url.hash = '';
+    return url.href;
   } catch {
     return href;
   }
