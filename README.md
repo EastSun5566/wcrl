@@ -1,11 +1,11 @@
 # WCrl
 
-> Ultra minimal web crawler
+> Ultra-minimal recursive web crawler
 
 ## Features
 
 - Simple CLI
-- BFS crawling
+- BFS recursive crawling
 - CSS selector support
 - Output to JSON or Markdown
 - Media extraction (images, videos)
