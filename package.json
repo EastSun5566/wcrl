@@ -1,6 +1,6 @@
 {
   "name": "wcrl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ultra-minimal recursive web crawler",
   "packageManager": "pnpm@9.15.9",
   "engines": {
