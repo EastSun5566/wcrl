@@ -23,4 +23,12 @@ export default defineConfig(
       'semi': ['error', 'always'],
     },
   },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
 );
