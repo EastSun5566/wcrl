@@ -19,6 +19,7 @@
     "dev": "tsc && node dist",
     "build": "rm -rf dist && tsc",
     "lint": "eslint --fix src",
+    "test": "tsc && node --test dist/*.test.js",
     "prepublishOnly": "pnpm run build"
   },
   "keywords": [
