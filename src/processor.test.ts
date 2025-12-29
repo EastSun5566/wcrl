@@ -5,7 +5,7 @@ import { createContentProcessor } from './processor.js';
 
 describe('processor', () => {
   describe('ContentProcessor', () => {
-    test('should extract metadata from HTML', () => {
+    test('should extract metadata from HTML', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -19,13 +19,13 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.metadata['title'], 'Test Page');
       assert.strictEqual(result.metadata['description'], 'Test description');
       assert.strictEqual(result.metadata['og:title'], 'OG Title');
     });
 
-    test('should extract internal and external links', () => {
+    test('should extract internal and external links', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -38,14 +38,14 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.links.internal.length, 2);
       assert.strictEqual(result.links.external.length, 1);
-      assert.strictEqual(result.links.internal[0]?.text, 'Internal Link 1');
-      assert.strictEqual(result.links.external[0]?.text, 'External Link');
+      assert.strictEqual(result.links.internal[0]!.text, 'Internal Link 1');
+      assert.strictEqual(result.links.external[0]!.text, 'External Link');
     });
 
-    test('should extract images and videos', () => {
+    test('should extract images and videos', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -57,14 +57,14 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.media.images.length, 1);
       assert.strictEqual(result.media.videos.length, 1);
-      assert.strictEqual(result.media.images[0]?.src, 'https://example.com/image.jpg');
-      assert.strictEqual(result.media.images[0]?.alt, 'Test Image');
+      assert.strictEqual(result.media.images[0]!.src, 'https://example.com/image.jpg');
+      assert.strictEqual(result.media.images[0]!.alt, 'Test Image');
     });
 
-    test('should skip data URLs for images', () => {
+    test('should skip data URLs for images', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -76,12 +76,12 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.media.images.length, 1);
-      assert.strictEqual(result.media.images[0]?.src, 'https://example.com/real-image.jpg');
+      assert.strictEqual(result.media.images[0]!.src, 'https://example.com/real-image.jpg');
     });
 
-    test('should remove unwanted elements', () => {
+    test('should remove unwanted elements', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -97,7 +97,7 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.cleanedHtml.includes('Navigation'), false);
       assert.strictEqual(result.cleanedHtml.includes('Header'), false);
       assert.strictEqual(result.cleanedHtml.includes('Footer'), false);
@@ -105,7 +105,7 @@ describe('processor', () => {
       assert.strictEqual(result.cleanedHtml.includes('Main content'), true);
     });
 
-    test('should convert HTML to markdown', () => {
+    test('should convert HTML to markdown', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -117,12 +117,12 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.markdown.includes('# Heading'), true);
       assert.strictEqual(result.markdown.includes('**bold**'), true);
     });
 
-    test('should extract text content', () => {
+    test('should extract text content', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -134,12 +134,12 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.content.includes('Title'), true);
       assert.strictEqual(result.content.includes('Some text content.'), true);
     });
 
-    test('should respect custom selector', () => {
+    test('should respect custom selector', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -151,12 +151,12 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'article');
-      
+
       assert.strictEqual(result.content.includes('Article content'), true);
       assert.strictEqual(result.content.includes('Header content'), false);
     });
 
-    test('should clean attributes except whitelisted ones', () => {
+    test('should clean attributes except whitelisted ones', async () => {
       const processor = createContentProcessor();
       const html = `
         <html>
@@ -168,7 +168,7 @@ describe('processor', () => {
       `;
 
       const result = processor.process(html, 'https://example.com', 'body');
-      
+
       assert.strictEqual(result.cleanedHtml.includes('href='), true);
       assert.strictEqual(result.cleanedHtml.includes('src='), true);
       assert.strictEqual(result.cleanedHtml.includes('alt='), true);
